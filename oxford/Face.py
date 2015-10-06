@@ -8,7 +8,7 @@ _identifyUrl = 'https://api.projectoxford.ai/face/v0/identifications';
 _verifyUrl = 'https://api.projectoxford.ai/face/v0/verifications';
 
 from .Base import Base
-from .Person import Person
+from .PersonGroup import PersonGroup
 
 class Face(Base):
     """Client for using the Project Oxford face APIs"""
@@ -19,7 +19,7 @@ class Face(Base):
             key (str). the API key to use for this client.
         """
         Base.__init__(self, key)
-        self.person = Person(self.key)
+        self.personGroup = PersonGroup(self.key)
 
     def detect(self, options):
         """Detects human faces in an image and returns face locations, face landmarks, and
