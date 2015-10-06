@@ -1,6 +1,6 @@
-# project-oxford-python
-Project Oxford for Python
+[![Build Status](https://travis-ci.org/scsouthw/project-oxford-python.svg?branch=master)](https://travis-ci.org/scsouthw/project-oxford-python) 
 
+# Project Oxford for Python #
 
 ## Contributing ##
 **Development environment**
