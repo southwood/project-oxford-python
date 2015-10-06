@@ -14,7 +14,7 @@ setup(
     #long_description=long_description, todo: long_discription
 
     # The project's main homepage.
-    url='https://github.com/Microsoft/ApplicationInsights-Python', # todo: add urls
+    url='https://github.com/Microsoft/ApplicationInsights-Python',
     download_url='https://github.com/Microsoft/ApplicationInsights-Python',
 
     # Author details
