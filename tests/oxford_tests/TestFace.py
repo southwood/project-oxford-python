@@ -13,7 +13,7 @@ if rootDirectory not in sys.path:
     sys.path.append(os.path.join(rootDirectory, '..'))
 
 from oxford.Face import Face
-from oxford.Person import Person
+from oxford.PersonGroup import PersonGroup
 
 # local file path to test images
 localFilePrefix = os.path.join(rootDirectory, 'tests', 'images')
@@ -33,7 +33,7 @@ class TestFace(unittest.TestCase):
 
     def test_face_constructor_sets_person_group_client(self):
         face = Face('key')
-        self.assertIsInstance(face.person, Person)
+        self.assertIsInstance(face.personGroup, PersonGroup)
 
     def test_face_return_throws_for_bad_request(self):
         self.assertRaises(Exception, client.detect, {'url': 'http://bing.com'});
