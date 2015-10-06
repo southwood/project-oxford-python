@@ -21,13 +21,10 @@ localFilePrefix = os.path.join(rootDirectory, 'tests', 'images')
 knownFaceIds = []
 knownPersonId = ""
 client = PersonGroup(os.environ['OXFORD_API_KEY'])
+delay = 1
 
 class TestFace(unittest.TestCase):
     '''Tests the oxford API client'''
-
-    def tearDown(self):
-        # sleep to prevent throttling
-        time.sleep(1)
 
     def test_constructor_throws_with_no_instrumentation_key(self):
         self.assertRaises(Exception, PersonGroup, None)
@@ -91,7 +88,6 @@ class TestFace(unittest.TestCase):
 
         countDown = 10
         while countDown > 0 and result['status'] == 'running':
-            time.sleep(0.5) # 500ms
             result = client.trainingStatus(personGroupId)
             countdown = countDown - 1
 

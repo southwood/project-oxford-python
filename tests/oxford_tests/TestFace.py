@@ -1,7 +1,6 @@
 import inspect
 import json
 import os
-import time
 import unittest
 import uuid
 
@@ -25,22 +24,18 @@ client = Face(os.environ['OXFORD_API_KEY'])
 class TestFace(unittest.TestCase):
     '''Tests the oxford face API client'''
 
-    def tearDown(self):
-        # sleep to prevent throttling
-        time.sleep(1)
-
-    def test_constructor_throws_with_no_instrumentation_key(self):
+    def test_face_constructor_throws_with_no_instrumentation_key(self):
         self.assertRaises(Exception, Face, None)
 
-    def test_constructor_sets_instrumentation_key(self):
+    def test_face_constructor_sets_instrumentation_key(self):
         face = Face('key')
         self.assertEqual('key', face.key)
 
-    def test_constructor_sets_person_group_client(self):
+    def test_face_constructor_sets_person_group_client(self):
         face = Face('key')
         self.assertIsInstance(face.person, Person)
 
-    def test_return_throws_for_bad_request(self):
+    def test_face_return_throws_for_bad_request(self):
         self.assertRaises(Exception, client.detect, {'url': 'http://bing.com'});
 
     def _learnFaceIds(self):
@@ -73,31 +68,32 @@ class TestFace(unittest.TestCase):
         self.assertIsInstance(attributes['gender'], str, 'gender is returned')
         self.assertIsInstance(attributes['age'], int, 'age is returned')
 
-    def test_detect_face_url(self):
+    def test_face_detect_url(self):
         options = self._getDetectOptions();
         options['url'] = 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'
         detectResult = client.detect(options)
         self._verifyDetect(detectResult)
 
-    def test_detect_face_file(self):
+    def test_face_detect_file(self):
         options = self._getDetectOptions();
         options['path'] = os.path.join(localFilePrefix, 'face1.jpg')
         detectResult = client.detect(options)
         self._verifyDetect(detectResult)
 
-    def test_detect_face_stream(self):
+    def test_face_detect_stream(self):
         options = self._getDetectOptions();
-        options['stream'] = open(os.path.join(localFilePrefix, 'face1.jpg'), 'rb').read()
-        detectResult = client.detect(options)
+        with open(os.path.join(localFilePrefix, 'face1.jpg'), 'rb') as file:
+            options['stream'] = file.read()
+            detectResult = client.detect(options)
         self._verifyDetect(detectResult)
 
-    def test_detect_face_throws_invalid_options(self):
+    def test_face_detect_throws_invalid_options(self):
         self.assertRaises(Exception, client.detect, {})
 
     #
     # test the similar API
     #
-    def test_similar_faces(self):
+    def test_face_similar(self):
         self._learnFaceIds()
         similarResult = client.similar(knownFaceIds[0], [knownFaceIds[1]])
         self.assertIsInstance(similarResult, list, 'similar result is returned')
@@ -106,8 +102,9 @@ class TestFace(unittest.TestCase):
     #
     # test the grouping API
     #
-    def test_grouping_faces(self):
+    def test_face_grouping(self):
         faces = client.detect({'path': os.path.join(localFilePrefix, 'face-group.jpg')})
+
 
         faceIds = []
         for face in faces:
@@ -121,7 +118,7 @@ class TestFace(unittest.TestCase):
     #
     # test the verify API
     #
-    def test_verify_faces(self):
+    def test_face_verify(self):
         self._learnFaceIds()
         verifyResult = client.verify(knownFaceIds[0], knownFaceIds[1])
         self.assertIsInstance(verifyResult, object, 'grouping result is returned')

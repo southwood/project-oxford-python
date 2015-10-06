@@ -7,9 +7,10 @@ _groupingUrl = 'https://api.projectoxford.ai/face/v0/groupings';
 _identifyUrl = 'https://api.projectoxford.ai/face/v0/identifications';
 _verifyUrl = 'https://api.projectoxford.ai/face/v0/verifications';
 
+from .Base import Base
 from .Person import Person
 
-class Face(object):
+class Face(Base):
     """Client for using the Project Oxford face APIs"""
     
     def __init__(self, key):
@@ -17,18 +18,8 @@ class Face(object):
         Args:
             key (str). the API key to use for this client.
         """
-
-        if key and isinstance(key, str):
-            self.key = key
-            self.person = Person(self.key)
-        else:
-            raise Exception('Key is required but a string was not provided')
-        
-    def _return(self, response):
-        if response.status_code is not 200:
-            raise Exception(str(response.status_code) + response.text)
-
-        return response.json()
+        Base.__init__(self, key)
+        self.person = Person(self.key)
 
     def detect(self, options):
         """Detects human faces in an image and returns face locations, face landmarks, and
@@ -66,23 +57,25 @@ class Face(object):
         # detect faces in a URL
         if 'url' in options and options['url'] != '':
             headers['Content-Type'] = 'application/json'
-            result = requests.post(_detectUrl, json={'url': options['url']}, headers=headers, params=params)
+            call = lambda: requests.post(_detectUrl, json={'url': options['url']}, headers=headers, params=params)
         
         # detect faces from a local file
         elif 'path' in options and options['path'] != '':
             headers['Content-Type'] = 'application/octet-stream'
-            result = requests.post(_detectUrl, data=open(options['path'], 'rb').read(), headers=headers, params=params)
+            with open(options['path'], 'rb') as file:
+                data = file.read()
+                call = lambda: requests.post(_detectUrl, data=data, headers=headers, params=params)
 
         # detect faces in an octect stream
         elif 'stream' in options:
             headers['Content-Type'] = 'application/octet-stream'
-            result = requests.post(_detectUrl, data=options['stream'], headers=headers, params=params)
+            call = lambda: requests.post(_detectUrl, data=options['stream'], headers=headers, params=params)
 
         # fail if the options didn't specify an image source
-        if result is None:
+        if call is None:
             raise Exception('either url, path, or stream must be specified')
 
-        return self._return(result)
+        return Base._invoke(self, call)
 
     def similar(self, sourceFace, candidateFaces):
         """Detect similar faces using faceIds (as returned from the detect API)
@@ -100,8 +93,8 @@ class Face(object):
             'faceIds': candidateFaces
         }
     
-        result = requests.post(_similarUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.post(_similarUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
 
     def grouping(self, faceIds):
         """Divides candidate faces into groups based on face similarity using faceIds.
@@ -123,8 +116,8 @@ class Face(object):
 
         body = { 'faceIds': faceIds }
     
-        result = requests.post(_groupingUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.post(_groupingUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
 
     def identify(self, faces, options):
         """Identifies persons from a person group by one or more input faces.
@@ -154,8 +147,8 @@ class Face(object):
             if options.maxNumOfCandidatesReturned is not None:
                 body['maxNumOfCandidatesReturned'] = options.maxNumOfCandidatesReturned
 
-        result = requests.post(_identifyUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.post(_identifyUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
 
     def verify(self, faceId1, faceId2):
         """Analyzes two faces and determine whether they are from the same person.
@@ -175,5 +168,5 @@ class Face(object):
             'faceId2': faceId2
         }
 
-        result = requests.post(_verifyUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.post(_verifyUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)

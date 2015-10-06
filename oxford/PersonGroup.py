@@ -3,6 +3,8 @@ import requests
 
 _personGroupUrl = 'https://api.projectoxford.ai/face/v0/persongroups';
 
+from .Base import Base
+
 class PersonGroup(object):
     """Client for using the Project Oxford person group APIs"""
     
@@ -11,18 +13,8 @@ class PersonGroup(object):
         Args:
             key (str). the API key to use for this client.
         """
-
-        if key and isinstance(key, str):
-            self.key = key
-        else:
-            raise Exception('Key is required but a string was not provided')
+        Base.__init__(self, key)
         
-    def _return(self, response):
-        if response.status_code < 200 or response.status_code >= 400:
-            raise Exception(str(response.status_code) + response.text)
-
-        return response.json() if response.content else None
-
     def create(self, personGroupId, name, userData):
         """Creates a new person group with a user-specified ID.
         A person group is one of the most important parameters for the Identification API.
@@ -43,8 +35,8 @@ class PersonGroup(object):
         }
     
         uri = _personGroupUrl + '/' + personGroupId
-        result = requests.put(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.put(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
 
     def delete(self, personGroupId):
         """Deletes an existing person group.
@@ -57,8 +49,8 @@ class PersonGroup(object):
         """
 
         uri = _personGroupUrl + '/' + personGroupId
-        result = requests.delete(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.delete(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
 
     def get(self, personGroupId):
         """Gets an existing person group.
@@ -71,8 +63,8 @@ class PersonGroup(object):
         """
 
         uri = _personGroupUrl + '/' + personGroupId
-        result = requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
 
     def trainingStatus(self, personGroupId):
         """Retrieves the training status of a person group. Training is triggered by the Train PersonGroup API.
@@ -87,8 +79,8 @@ class PersonGroup(object):
         """
 
         uri = _personGroupUrl + '/' + personGroupId + '/training'
-        result = requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
 
     def trainingStart(self, personGroupId):
         """Starts a person group training.
@@ -104,8 +96,8 @@ class PersonGroup(object):
         """
 
         uri = _personGroupUrl + '/' + personGroupId + '/training'
-        result = requests.post(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.post(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
 
     def update(self, personGroupId, name, userData):
         """Updates a new person group with a user-specified ID.
@@ -127,8 +119,8 @@ class PersonGroup(object):
         }
     
         uri = _personGroupUrl + '/' + personGroupId
-        result = requests.patch(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.patch(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
 
     def list(self):
         """Lists all person groups in the current subscription.
@@ -137,5 +129,5 @@ class PersonGroup(object):
             object. The resulting JSON
         """
 
-        result = requests.get(_personGroupUrl, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return self._return(result)
+        call = lambda: requests.get(_personGroupUrl, headers={'Ocp-Apim-Subscription-Key': self.key})
+        return Base._invoke(self, call)
