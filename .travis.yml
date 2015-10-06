@@ -1,8 +1,8 @@
 language: python
 python:
   - "3.4"
-before_install:
-  - "pip install setuptools==9.1"
+install:
+  - pip install requests
 script:
   - python setup.py sdist
   - python setup.py test
