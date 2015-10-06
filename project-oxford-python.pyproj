@@ -37,7 +37,18 @@
   <ItemGroup>
     <Folder Include="oxford" />
     <Folder Include="tests" />
+    <Folder Include="tests\images\" />
     <Folder Include="tests\oxford_tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include=".travis.yml" />
+    <Content Include="LICENSE" />
+    <Content Include="README.md" />
+    <Content Include="tests\images\face-group.jpg" />
+    <Content Include="tests\images\face1.jpg" />
+    <Content Include="tests\images\face2.jpg" />
+    <Content Include="tests\images\vision.jpg" />
   </ItemGroup>
   <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
