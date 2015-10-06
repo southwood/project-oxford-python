@@ -6,8 +6,8 @@ _similarUrl = 'https://api.projectoxford.ai/face/v0/findsimilars';
 _groupingUrl = 'https://api.projectoxford.ai/face/v0/groupings';
 _identifyUrl = 'https://api.projectoxford.ai/face/v0/identifications';
 _verifyUrl = 'https://api.projectoxford.ai/face/v0/verifications';
-_personGroupUrl = 'https://api.projectoxford.ai/face/v0/persongroups';
-_personUrl = 'https://api.projectoxford.ai/face/v0/persongroups';
+
+from .Person import Person
 
 class Face(object):
     """Client for using the Project Oxford face APIs"""
@@ -20,12 +20,13 @@ class Face(object):
 
         if key and isinstance(key, str):
             self.key = key
+            self.person = Person(self.key)
         else:
             raise Exception('Key is required but a string was not provided')
         
     def _return(self, response):
         if response.status_code is not 200:
-            raise Exception(response.status_code + response.text)
+            raise Exception(str(response.status_code) + response.text)
 
         return response.json()
 
@@ -46,7 +47,7 @@ class Face(object):
             options.analyzesHeadPose (boolean). The Analyze headpose?
 
         Returns:
-            object. The detection response 
+            object. The resulting JSON
         """
 
         # common header
@@ -91,7 +92,7 @@ class Face(object):
             candidateFaces (str[]). The source face
 
         Returns:
-            object. The similarity response 
+            object. The resulting JSON
         """
 
         body = {
@@ -117,7 +118,7 @@ class Face(object):
             faceIds (str[]). Array of faceIds to use
 
         Returns:
-            object. The grouping response
+            object. The resulting JSON
         """
 
         body = { 'faceIds': faceIds }
@@ -140,7 +141,7 @@ class Face(object):
             options.maxNumOfCandidatesReturned (str). Maximum number of candidates to return
 
         Returns:
-            object. The identify response 
+            object. The resulting JSON
         """
 
         body = {
@@ -166,7 +167,7 @@ class Face(object):
             faceId2 (str). The second face to compare
         
         Returns:
-            object. The verify response 
+            object. The resulting JSON
         """
 
         body = {
