@@ -1,95 +1,76 @@
 import inspect
-import json
 import os
-import time
+import sys
 import unittest
 import uuid
-
-from test import test_support
-
-import sys, os, os.path
 
 rootDirectory = os.path.dirname(os.path.realpath('__file__'))
 if rootDirectory not in sys.path:
     sys.path.append(os.path.join(rootDirectory, '..'))
 
-from oxford.PersonGroup import PersonGroup
+from test import test_support
+from oxford.Client import Client
 
-# local file path to test images
-localFilePrefix = os.path.join(rootDirectory, 'tests', 'images')
-
-knownFaceIds = []
-knownPersonId = ""
-client = PersonGroup(os.environ['OXFORD_API_KEY'])
-delay = 1
-
-class TestFace(unittest.TestCase):
+class TestPersonGroup(unittest.TestCase):
     '''Tests the oxford API client'''
 
-    def test_constructor_throws_with_no_instrumentation_key(self):
-        self.assertRaises(Exception, PersonGroup, None)
+    @classmethod
+    def setUpClass(cls):
+        # set up self.client for tests
+        cls.client = Client(os.environ['oxford_api_key'])
 
-    def test_constructor_sets_instrumentation_key(self):
-        personGroup = PersonGroup('key')
-        self.assertEqual('key', personGroup.key)
+        # detect two faces
+        cls.knownFaceIds = [];
+        cls.localFilePrefix = os.path.join(rootDirectory, 'tests', 'images')
+        face1 = cls.client.face.detect({'path': os.path.join(cls.localFilePrefix, 'face1.jpg')})
+        face2 = cls.client.face.detect({'path': os.path.join(cls.localFilePrefix, 'face2.jpg')})
+        cls.knownFaceIds.append(face1[0]['faceId'])
+        cls.knownFaceIds.append(face2[0]['faceId'])
+        return super().setUpClass()
 
-    def _learnFaceIds(self):
-        if not knownFaceIds:
-            from oxford.Face import Face
-            faceClient = Face(os.environ['OXFORD_API_KEY'])
-            face1 = faceClient.detect({'path': os.path.join(localFilePrefix, 'face1.jpg')})
-            face2 = faceClient.detect({'path': os.path.join(localFilePrefix, 'face2.jpg')})
-            knownFaceIds.append(face1[0]['faceId'])
-            knownFaceIds.append(face2[0]['faceId'])
-    
-    def _cleanUp(self):
-        result = client.list()
-        for pg in result:
-            client.delete(pg['personGroupId'])
-
-    def test_person_group_create(self):
+    def test_person_group_create_delete(self):
         personGroupId = str(uuid.uuid4())
-        result = client.create(personGroupId, 'python-test-group', 'test-data')
+        result = self.client.face.personGroup.create(personGroupId, 'python-test-group', 'test-data')
         self.assertIsNone(result, "empty response expected")
-        client.delete(personGroupId)
+        self.client.face.personGroup.delete(personGroupId)
 
     def test_person_group_list(self):
         personGroupId = str(uuid.uuid4())
-        client.create(personGroupId, 'python-test-group', 'test-data')
-        result = client.list()
+        self.client.face.personGroup.create(personGroupId, 'python-test-group', 'test-data')
+        result = self.client.face.personGroup.list()
         match = next((x for x in result if x['personGroupId'] == personGroupId), None)
 
         self.assertEqual(match['personGroupId'], personGroupId)
         self.assertEqual(match['name'], 'python-test-group')
         self.assertEqual(match['userData'], 'test-data')
-        client.delete(personGroupId)
+        self.client.face.personGroup.delete(personGroupId)
 
     def test_person_group_get(self):
         personGroupId = str(uuid.uuid4())
-        client.create(personGroupId, 'python-test-group', 'test-data')
-        result = client.get(personGroupId)
+        self.client.face.personGroup.create(personGroupId, 'python-test-group', 'test-data')
+        result = self.client.face.personGroup.get(personGroupId)
         self.assertEqual(result['personGroupId'], personGroupId)
         self.assertEqual(result['name'], 'python-test-group')
         self.assertEqual(result['userData'], 'test-data')
-        client.delete(personGroupId)
+        self.client.face.personGroup.delete(personGroupId)
 
     def test_person_group_update(self):
         personGroupId = str(uuid.uuid4())
-        client.create(personGroupId, 'python-test-group', 'test-data')
-        result = client.update(personGroupId, 'python-test-group2', 'test-data2')
+        self.client.face.personGroup.create(personGroupId, 'python-test-group', 'test-data')
+        result = self.client.face.personGroup.update(personGroupId, 'python-test-group2', 'test-data2')
         self.assertIsNone(result, "empty response expected")
-        client.delete(personGroupId)
+        self.client.face.personGroup.delete(personGroupId)
 
     def test_person_group_training(self):
         personGroupId = str(uuid.uuid4())
-        client.create(personGroupId, 'python-test-group', 'test-data')
-        result = client.trainingStart(personGroupId)
+        self.client.face.personGroup.create(personGroupId, 'python-test-group', 'test-data')
+        result = self.client.face.personGroup.trainingStart(personGroupId)
         self.assertEqual(result['status'], 'running')
 
         countDown = 10
         while countDown > 0 and result['status'] == 'running':
-            result = client.trainingStatus(personGroupId)
+            result = self.client.face.personGroup.trainingStatus(personGroupId)
             countdown = countDown - 1
 
         self.assertNotEqual(result['status'], 'running')
-        client.delete(personGroupId)
+        self.client.face.personGroup.delete(personGroupId)

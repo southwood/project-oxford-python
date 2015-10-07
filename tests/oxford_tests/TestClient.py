@@ -23,3 +23,7 @@ class TestClient(unittest.TestCase):
     def test_constructor_sets_instrumentation_key(self):
         oxford = Client('key')
         self.assertEqual('key', oxford.key)
+
+    def test_face_return_throws_for_bad_request(self):
+        client = Client(os.environ['oxford_api_key'])
+        self.assertRaises(Exception, client.face.detect, {'url': 'http://bing.com'});

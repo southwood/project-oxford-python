@@ -1,13 +1,14 @@
 import json
 import requests
 
-_detectUrl = 'https://api.projectoxford.ai/face/v0/detections';
-_similarUrl = 'https://api.projectoxford.ai/face/v0/findsimilars';
-_groupingUrl = 'https://api.projectoxford.ai/face/v0/groupings';
-_identifyUrl = 'https://api.projectoxford.ai/face/v0/identifications';
-_verifyUrl = 'https://api.projectoxford.ai/face/v0/verifications';
+_detectUrl = 'https://api.projectoxford.ai/face/v0/detections'
+_similarUrl = 'https://api.projectoxford.ai/face/v0/findsimilars'
+_groupingUrl = 'https://api.projectoxford.ai/face/v0/groupings'
+_identifyUrl = 'https://api.projectoxford.ai/face/v0/identifications'
+_verifyUrl = 'https://api.projectoxford.ai/face/v0/verifications'
 
 from .Base import Base
+from .Person import Person
 from .PersonGroup import PersonGroup
 
 class Face(Base):
@@ -19,6 +20,7 @@ class Face(Base):
             key (str). the API key to use for this client.
         """
         Base.__init__(self, key)
+        self.person = Person(self.key)
         self.personGroup = PersonGroup(self.key)
 
     def detect(self, options):

@@ -1,11 +1,10 @@
-import json
 import requests
 
-_personGroupUrl = 'https://api.projectoxford.ai/face/v0/persongroups';
+_personGroupUrl = 'https://api.projectoxford.ai/face/v0/persongroups'
 
 from .Base import Base
 
-class PersonGroup(object):
+class PersonGroup(Base):
     """Client for using the Project Oxford person group APIs"""
     
     def __init__(self, key):
@@ -15,7 +14,7 @@ class PersonGroup(object):
         """
         Base.__init__(self, key)
         
-    def create(self, personGroupId, name, userData):
+    def create(self, personGroupId, name, userData=None):
         """Creates a new person group with a user-specified ID.
         A person group is one of the most important parameters for the Identification API.
         The Identification searches person faces in a specified person group.
@@ -23,7 +22,7 @@ class PersonGroup(object):
         Args:
             personGroupId (str). Numbers, en-us letters in lower case, '-', '_'. Max length: 64
             name (str). Person group display name. The maximum length is 128.
-            userData (str). User-provided data attached to the group. The size limit is 16KB.
+            userData (str). Optional user-provided data attached to the group. The size limit is 16KB.
 
         Returns:
             object. The resulting JSON
@@ -99,7 +98,7 @@ class PersonGroup(object):
         call = lambda: requests.post(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
 
-    def update(self, personGroupId, name, userData):
+    def update(self, personGroupId, name, userData=None):
         """Updates a new person group with a user-specified ID.
         A person group is one of the most important parameters for the Identification API.
         The Identification searches person faces in a specified person group.
