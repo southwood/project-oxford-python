@@ -25,16 +25,16 @@ Usage
 
 .. code:: python
 
-from projectoxford import Client
-client = Client('<api_key>')
+    from projectoxford import Client
+    client = Client('<api_key>')
 
 **Face detection**
 
 .. code:: python
 
-result = client.face.detect({'url': 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'})
-print result['faceId']
-print result['attributes']['age']
+    result = client.face.detect({'url': 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'})
+    print result['faceId']
+    print result['attributes']['age']
 
 
 License

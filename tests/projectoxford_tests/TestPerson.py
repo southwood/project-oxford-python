@@ -9,11 +9,11 @@ if rootDirectory not in sys.path:
     sys.path.append(os.path.join(rootDirectory, '..'))
 
 from test import test_support
-from oxford.Client import Client
-from oxford.Person import Person
+from projectoxford.Client import Client
+from projectoxford.Person import Person
 
 class TestPerson(unittest.TestCase):
-    '''Tests the oxford API client'''
+    '''Tests the project oxford API client'''
 
     @classmethod
     def setUpClass(cls):

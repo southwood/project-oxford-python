@@ -12,10 +12,10 @@ rootDirectory = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
 if rootDirectory not in sys.path:
     sys.path.append(rootDirectory)
 
-from oxford.Client import Client
+from projectoxford.Client import Client
 
 class TestClient(unittest.TestCase):
-    """Tests the oxford API client"""
+    """Tests the project oxford API client"""
     
     def test_constructor_throws_with_no_instrumentation_key(self):
         self.assertRaises(Exception, Client, None)

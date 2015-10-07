@@ -10,13 +10,13 @@ if rootDirectory not in sys.path:
     sys.path.append(os.path.join(rootDirectory, '..'))
 
 from test import test_support
-from oxford.Client import Client
-from oxford.Face import Face
-from oxford.Person import Person
-from oxford.PersonGroup import PersonGroup
+from projectoxford.Client import Client
+from projectoxford.Face import Face
+from projectoxford.Person import Person
+from projectoxford.PersonGroup import PersonGroup
 
 class TestFace(unittest.TestCase):
-    '''Tests the oxford face API self.client'''
+    '''Tests the project oxford face API self.client'''
 
     @classmethod
     def setUpClass(cls):
