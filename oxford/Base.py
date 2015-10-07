@@ -32,7 +32,9 @@ class Base(object):
                 raise Exception('retry count ({0}) exceeded: {1}'.format(str(retryCount), response.text))
         elif response.status_code == 200 or response.status_code == 201:
             result = response # return the raw response if an unexpected content type is returned
-            if 'content-type' in response.headers and isinstance(response.headers['content-type'], str):
+            if 'content-length' in response.headers and int(response.headers['content-length']) == 0:
+                result = None
+            elif 'content-type' in response.headers and isinstance(response.headers['content-type'], str):
                 if 'application/json' in response.headers['content-type'].lower():
                     result = response.json() if response.content else None
                 elif 'image' in response.headers['content-type'].lower():
