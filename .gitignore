@@ -62,3 +62,5 @@ target/
 *.sln.docstates
 .idea/
 doc/_build/
+*.mdf
+*.ldf

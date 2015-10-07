@@ -76,6 +76,9 @@ class TestPerson(unittest.TestCase):
         face = self.client.face.person.getFace(self.personGroupId, personId, self.knownFaceIds[1])
         self.assertEqual(face['faceId'], self.knownFaceIds[1])
 
+        # clean up
+        self.client.face.person.delete(self.personGroupId, personId)
+
     def test_person_list(self):
         # create some people
         result1 = self.client.face.person.create(self.personGroupId, [self.knownFaceIds[0]], 'billg1', 'test-person')
@@ -84,3 +87,7 @@ class TestPerson(unittest.TestCase):
         # list them
         listResult = self.client.face.person.list(self.personGroupId)
         self.assertEqual(len(listResult), 2)
+
+        # remove them
+        for person in listResult:
+            self.client.face.person.delete(self.personGroupId, person['personId'])
