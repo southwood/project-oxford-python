@@ -54,6 +54,14 @@ print result['attributes']['age']
     ```
     python setup.py test
     ```
+* Publishing
+	- update version number in setup.py
+	```
+	git tag <version number> -m "update tag version"
+	git push --tags origin master
+	python setup.py register -r pypi
+	python setup.py sdist upload
+	```
 
 ## License
 Licensed as MIT - please see LICENSE for details.
