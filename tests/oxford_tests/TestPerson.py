@@ -18,7 +18,7 @@ class TestPerson(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # set up client for tests
-        cls.client = Client(os.environ['oxford_api_key'])
+        cls.client = Client(os.environ['OXFORD_API_KEY'])
 
         # detect two faces
         cls.knownFaceIds = [];

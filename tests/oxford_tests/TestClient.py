@@ -25,5 +25,5 @@ class TestClient(unittest.TestCase):
         self.assertEqual('key', oxford.key)
 
     def test_face_return_throws_for_bad_request(self):
-        client = Client(os.environ['oxford_api_key'])
+        client = Client(os.environ['OXFORD_API_KEY'])
         self.assertRaises(Exception, client.face.detect, {'url': 'http://bing.com'});
