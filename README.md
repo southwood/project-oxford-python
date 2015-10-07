@@ -7,6 +7,31 @@ This python module implements all APIs available in the Face and Vision APIs of 
 
 ![](https://i.imgur.com/Zrsnhd3.jpg)
 
+## Installation ##
+
+To install the latest release you can use [pip](http://www.pip-installer.org/).
+
+```
+$ pip install projectoxford
+```
+
+## Usage ##
+
+>**Note**: before you can send data to you will need an API key. There is are separate API keys for face and vision.
+
+**Initialize a client**
+```python
+from projectoxford import Client
+client = Client('<api_key>')
+```
+
+**Face detection**
+```python
+result = client.face.detect({'url': 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'})
+print result['faceId']
+print result['attributes']['age']
+```
+
 ## Contributing
 **Development environment**
 
