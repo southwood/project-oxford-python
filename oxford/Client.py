@@ -1,4 +1,5 @@
 from .Face import Face
+from .Vision import Vision
 
 class Client(object):
     """Client for using project oxford APIs"""
@@ -15,7 +16,7 @@ class Client(object):
             raise Exception('Key is required but a string was not provided')
 
         self._face = Face(key)
-        #self._vision = vision(key)
+        self._vision = Vision(key)
 
     @property
     def face(self):

@@ -1,4 +1,5 @@
 import time
+import requests
 
 retryCount = 3
 
@@ -34,4 +35,42 @@ class Base(object):
         else:
             raise Exception('status {0}: {1}'.format(str(response.status_code), response.text))
 
+    def _postWithOptions(self, url, options, params={}):
+        """Common options handler for vision / face detection
+
+        Args:
+            options (Object). The Options object describing features to extract
+            options.url (string). The Url to image to be analyzed
+            options.path (string). The Path to image to be analyzed
+            options.stream (string). The image stream to be analyzed
+            params (Object). The url parameters object
+
+        Returns:
+            object. The resulting JSON
+        """
+
+        # common header
+        headers = { 'Ocp-Apim-Subscription-Key': self.key }
+
+        # detect faces in a URL
+        if 'url' in options and options['url'] != '':
+            headers['Content-Type'] = 'application/json'
+            call = lambda: requests.post(url, json={'url': options['url']}, headers=headers, params=params)
         
+        # detect faces from a local file
+        elif 'path' in options and options['path'] != '':
+            headers['Content-Type'] = 'application/octet-stream'
+            with open(options['path'], 'rb') as file:
+                data = file.read()
+                call = lambda: requests.post(url, data=data, headers=headers, params=params)
+
+        # detect faces in an octect stream
+        elif 'stream' in options:
+            headers['Content-Type'] = 'application/octet-stream'
+            call = lambda: requests.post(url, data=options['stream'], headers=headers, params=params)
+
+        # fail if the options didn't specify an image source
+        if call is None:
+            raise Exception('either url, path, or stream must be specified')
+
+        return Base._invoke(self, call)

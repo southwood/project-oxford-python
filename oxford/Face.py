@@ -42,11 +42,6 @@ class Face(Base):
         Returns:
             object. The resulting JSON
         """
-
-        # common header
-        headers = {
-            'Ocp-Apim-Subscription-Key': self.key
-        }
     
         # build params query string
         params = {
@@ -56,28 +51,7 @@ class Face(Base):
             'analyzesHeadPose': 'true' if 'analyzesHeadPose' in options else 'false'
         }
 
-        # detect faces in a URL
-        if 'url' in options and options['url'] != '':
-            headers['Content-Type'] = 'application/json'
-            call = lambda: requests.post(_detectUrl, json={'url': options['url']}, headers=headers, params=params)
-        
-        # detect faces from a local file
-        elif 'path' in options and options['path'] != '':
-            headers['Content-Type'] = 'application/octet-stream'
-            with open(options['path'], 'rb') as file:
-                data = file.read()
-                call = lambda: requests.post(_detectUrl, data=data, headers=headers, params=params)
-
-        # detect faces in an octect stream
-        elif 'stream' in options:
-            headers['Content-Type'] = 'application/octet-stream'
-            call = lambda: requests.post(_detectUrl, data=options['stream'], headers=headers, params=params)
-
-        # fail if the options didn't specify an image source
-        if call is None:
-            raise Exception('either url, path, or stream must be specified')
-
-        return Base._invoke(self, call)
+        return Base._postWithOptions(self, _detectUrl, options, params)
 
     def similar(self, sourceFace, candidateFaces):
         """Detect similar faces using faceIds (as returned from the detect API)

@@ -36,6 +36,7 @@
     <Compile Include="oxford\Vision.py" />
     <Compile Include="oxford\__init__.py" />
     <Compile Include="setup.py" />
+    <Compile Include="tests\oxford_tests\TestVision.py" />
     <Compile Include="tests\oxford_tests\TestPerson.py" />
     <Compile Include="tests\oxford_tests\TestPersonGroup.py" />
     <Compile Include="tests\oxford_tests\TestFace.py" />
