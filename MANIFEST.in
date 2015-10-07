@@ -1,0 +1,8 @@
+include DESCRIPTION.rst
+include README.md
+include LICENSE
+include project-oxford-python.pyproj
+include project-oxford-python.sln
+# Include the test suite
+recursive-include tests *
+global-exclude *.pyc 

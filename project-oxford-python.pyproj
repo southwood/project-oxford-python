@@ -53,7 +53,9 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include=".travis.yml" />
+    <Content Include="DESCRIPTION.rst" />
     <Content Include="LICENSE" />
+    <Content Include="MANIFEST.in" />
     <Content Include="README.md" />
     <Content Include="setup.cfg" />
     <Content Include="tests\images\face-group.jpg" />

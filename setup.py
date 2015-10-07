@@ -2,8 +2,14 @@ from setuptools import setup, find_packages  # Always prefer setuptools over dis
 from codecs import open  # To use a consistent encoding
 from os import path
 
+here = path.abspath(path.dirname(__file__))
+
+# Get the long description from the relevant file
+with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
+    long_description = f.read()
+
 setup(
-    name='projectOxford',
+    name='projectoxford',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
@@ -11,7 +17,7 @@ setup(
     version='0.1.0',
 
     description='This project extends the Project Oxford API surface to support Python.',
-    #long_description=long_description, todo: long_discription
+    long_description=long_description,
 
     # The project's main homepage.
     url='https://github.com/Microsoft/ApplicationInsights-Python',
