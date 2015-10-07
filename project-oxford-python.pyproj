@@ -29,12 +29,14 @@
     </Compile>
     <Compile Include="oxford\Client.py" />
     <Compile Include="oxford\Face.py" />
+    <Compile Include="oxford\Person.py" />
     <Compile Include="oxford\PersonGroup.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="oxford\Vision.py" />
     <Compile Include="oxford\__init__.py" />
     <Compile Include="setup.py" />
+    <Compile Include="tests\oxford_tests\TestPerson.py" />
     <Compile Include="tests\oxford_tests\TestPersonGroup.py" />
     <Compile Include="tests\oxford_tests\TestFace.py" />
     <Compile Include="tests\oxford_tests\__init__.py" />
