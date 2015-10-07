@@ -1,3 +1,4 @@
+import copy
 import inspect
 import os
 import sys
@@ -56,19 +57,19 @@ class TestFace(unittest.TestCase):
         self.assertIsInstance(attributes['age'], int, 'age is returned')
 
     def test_face_detect_url(self):
-        options = self.detectOptions
+        options = copy.copy(self.detectOptions)
         options['url'] = 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'
         detectResult = self.client.face.detect(options)
         self._verifyDetect(detectResult)
 
     def test_face_detect_file(self):
-        options = self.detectOptions
+        options = copy.copy(self.detectOptions)
         options['path'] = os.path.join(self.localFilePrefix, 'face1.jpg')
         detectResult = self.client.face.detect(options)
         self._verifyDetect(detectResult)
 
     def test_face_detect_stream(self):
-        options = self.detectOptions
+        options = copy.copy(self.detectOptions)
         with open(os.path.join(self.localFilePrefix, 'face1.jpg'), 'rb') as file:
             options['stream'] = file.read()
             detectResult = self.client.face.detect(options)

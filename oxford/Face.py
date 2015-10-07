@@ -25,15 +25,17 @@ class Face(Base):
 
     def detect(self, options):
         """Detects human faces in an image and returns face locations, face landmarks, and
-         optional attributes including head-pose, gender, and age. Detection is an essential
-         API that provides faceId to other APIs like Identification, Verification,
-         and Find Similar.
+        optional attributes including head-pose, gender, and age. Detection is an essential
+        API that provides faceId to other APIs like Identification, Verification,
+        and Find Similar.
+
+        Note: exactly one of url, path, or stream must be provided in the options object
 
         Args:
             options (object). The Options object
             options.url (str). The URL to image to be used
             options.path (str). The Path to image to be used
-            options.stream (stream). The Stream for image to be used
+            options.stream (stream). The stream of the image to be used
             options.analyzesFaceLandmarks (boolean). The Analyze face landmarks?
             options.analyzesAge (boolean). The Analyze age?
             options.analyzesGender (boolean). The Analyze gender?
