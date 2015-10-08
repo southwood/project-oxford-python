@@ -41,6 +41,8 @@ class Base(object):
                     result = response.content
             
             return result
+        elif response.status_code == 404:
+            return None
         else:
             raise Exception('status {0}: {1}'.format(str(response.status_code), response.text))
 
