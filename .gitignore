@@ -64,3 +64,4 @@ target/
 doc/_build/
 *.mdf
 *.ldf
+thumbnail*

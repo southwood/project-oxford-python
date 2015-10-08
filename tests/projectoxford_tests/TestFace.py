@@ -39,21 +39,19 @@ class TestFace(unittest.TestCase):
             'analyzesHeadPose': True
         }
 
-        #return super().setUpClass()
-
     #
     # test the detect API
     #
     def _verifyDetect(self, detectResult):
         faceIdResult = detectResult[0]
         
-        self.assertIsInstance(faceIdResult['faceId'], str, 'face ID is returned')
+        self.assertIsInstance(faceIdResult['faceId'], object, 'face ID is returned')
         self.assertIsInstance(faceIdResult['faceRectangle'], object, 'faceRectangle is returned')
         self.assertIsInstance(faceIdResult['faceLandmarks'], object, 'faceLandmarks are returned')
         
         attributes = faceIdResult['attributes']
         self.assertIsInstance(attributes, object, 'attributes are returned')
-        self.assertIsInstance(attributes['gender'], str, 'gender is returned')
+        self.assertIsInstance(attributes['gender'], object, 'gender is returned')
         self.assertIsInstance(attributes['age'], int, 'age is returned')
 
     def test_face_detect_url(self):

@@ -42,8 +42,6 @@ class TestFace(unittest.TestCase):
             'detectOrientation': True
         }
 
-        return super().setUpClass()
-
     #
     # test the analyze API
     #
@@ -92,7 +90,7 @@ class TestFace(unittest.TestCase):
         options = copy.copy(self.thumbnailOptions)
         options['url'] = 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'
         result = self.client.vision.thumbnail(options)
-        self._verify_thumbnail_result(result, 'thumbnail_from_file.jpg')
+        self._verify_thumbnail_result(result, 'thumbnail_from_url.jpg')
 
     def test_vision_thumbnail_stream(self):
         options = copy.copy(self.thumbnailOptions)
@@ -100,7 +98,7 @@ class TestFace(unittest.TestCase):
             options['stream'] = file.read()
             result = self.client.vision.thumbnail(options)
 
-        self._verify_thumbnail_result(result, 'thumbnail_from_file.jpg')
+        self._verify_thumbnail_result(result, 'thumbnail_from_stream.jpg')
 
     #
     # test the OCR API

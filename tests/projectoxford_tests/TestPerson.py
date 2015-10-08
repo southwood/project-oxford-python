@@ -31,18 +31,16 @@ class TestPerson(unittest.TestCase):
         # create a person group
         cls.personGroupId = str(uuid.uuid4())
         cls.client.face.personGroup.create(cls.personGroupId, 'test-person-group')
-        return super().setUpClass()
 
     @classmethod
     def tearDownClass(cls):
         cls.client.face.personGroup.delete(cls.personGroupId)
-        return super().tearDownClass()
 
     def test_person_create_update_get_delete(self):
         # create
         result = self.client.face.person.create(self.personGroupId, self.knownFaceIds, 'billg', 'test-person')
         personId = result['personId']
-        self.assertIsInstance(personId, str, 'person id was returned')
+        self.assertIsInstance(personId, object, 'person id was returned')
 
         # update
         result = self.client.face.person.update(self.personGroupId, personId, self.knownFaceIds, 'bill gates', 'test-person')
@@ -61,7 +59,7 @@ class TestPerson(unittest.TestCase):
         # create
         result = self.client.face.person.create(self.personGroupId, [self.knownFaceIds[0]], 'billg', 'test-person')
         personId = result['personId']
-        self.assertIsInstance(personId, str, 'create succeeded')
+        self.assertIsInstance(personId, object, 'create succeeded')
 
         # add a new face ID
         self.client.face.person.addFace(self.personGroupId, personId, self.knownFaceIds[1])

@@ -26,7 +26,6 @@ class TestPersonGroup(unittest.TestCase):
         face2 = cls.client.face.detect({'path': os.path.join(cls.localFilePrefix, 'face2.jpg')})
         cls.knownFaceIds.append(face1[0]['faceId'])
         cls.knownFaceIds.append(face2[0]['faceId'])
-        return super().setUpClass()
 
     def test_person_group_create_delete(self):
         personGroupId = str(uuid.uuid4())
