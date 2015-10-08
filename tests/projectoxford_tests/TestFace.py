@@ -39,7 +39,7 @@ class TestFace(unittest.TestCase):
             'analyzesHeadPose': True
         }
 
-        return super().setUpClass()
+        #return super().setUpClass()
 
     #
     # test the detect API

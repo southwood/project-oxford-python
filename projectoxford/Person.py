@@ -84,14 +84,14 @@ class Person(Base):
         call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
 
-    def create(self, personGroupId, faces, name, userData=None):
+    def create(self, personGroupId, faceIds, name, userData=None):
         """Creates a new person in a specified person group for identification.
         The number of persons has a subscription limit. Free subscription amount is 1000 persons.
         The maximum face count for each person is 32.
 
         Args:
             personGroupId (str). The target person's person group.
-            faces ([str]). Array of face id's for the target person
+            faceIds ([str]). Array of face id's for the target person
             name (str). Target person's display name. The maximum length is 128.
             userData (str). Optional fields for user-provided data attached to a person. Size limit is 16KB.
 
@@ -100,7 +100,7 @@ class Person(Base):
         """
 
         body = {
-            'faceIds': faces,
+            'faceIds': faceIds,
             'name': name
         }
 
@@ -141,13 +141,13 @@ class Person(Base):
         call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
 
-    def update(self, personGroupId, personId, faces, name, userData=None):
+    def update(self, personGroupId, personId, faceIds, name, userData=None):
         """Updates a person's information.
 
         Args:
             personGroupId (str). The target person's person group.
             personId (str). The target persons Id.
-            faces ([str]). Array of face id's for the target person.
+            faceIds ([str]). Array of face id's for the target person.
             name (str). Target person's display name. The maximum length is 128.
             userData (str). Optional fields for user-provided data attached to a person. Size limit is 16KB.
 
@@ -156,7 +156,7 @@ class Person(Base):
         """
 
         body = {
-            'faceIds': faces,
+            'faceIds': faceIds,
             'name': name,
             'userData': userData
         }
@@ -164,6 +164,26 @@ class Person(Base):
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId
         call = lambda: requests.patch(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
+
+    def createOrUpdate(self, personGroupId, faceIds, name, userData=None):
+        """Creates or updates a person's information.
+
+        Args:
+            personGroupId (str). The target person's person group.
+            faceIds ([str]). Array of face id's for the target person.
+            name (str). Target person's display name. The maximum length is 128.
+            userData (str). Optional fields for user-provided data attached to a person. Size limit is 16KB.
+
+        Returns:
+            object. The resulting JSON
+        """
+        persons = self.list(personGroupId)
+        for person in persons:
+            if person['name'] == name:
+                self.update(personGroupId, person['personId'], faceIds, name, userData)
+                return person
+                
+        return self.create(personGroupId, faceIds, name, userData)
 
     def list(self, personGroupId):
         """Lists all persons in a person group, with the person information.

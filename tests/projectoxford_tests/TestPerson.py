@@ -72,7 +72,7 @@ class TestPerson(unittest.TestCase):
         self.assertTrue(True, 'delete succeeded')
 
         # verify expected face ID
-        self.assertRaises(Exception, self.client.face.person.getFace, self.personGroupId, personId, self.knownFaceIds[0])
+        self.assertIsNone(self.client.face.person.getFace(self.personGroupId, personId, self.knownFaceIds[0]))
         face = self.client.face.person.getFace(self.personGroupId, personId, self.knownFaceIds[1])
         self.assertEqual(face['faceId'], self.knownFaceIds[1])
 
@@ -91,3 +91,12 @@ class TestPerson(unittest.TestCase):
         # remove them
         for person in listResult:
             self.client.face.person.delete(self.personGroupId, person['personId'])
+
+    def test_person_create_or_update(self):
+        self.client.face.person.createOrUpdate(self.personGroupId, [self.knownFaceIds[0]], 'billg1', 'test-person')
+        result = self.client.face.person.createOrUpdate(self.personGroupId, [self.knownFaceIds[1]], 'billg1', 'test-person-updated')
+        result = self.client.face.person.get(self.personGroupId, result['personId'])
+
+        self.assertEqual(result['userData'], 'test-person-updated')
+
+        self.client.face.person.delete(self.personGroupId, result['personId'])

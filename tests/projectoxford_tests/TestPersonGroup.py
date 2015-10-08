@@ -74,3 +74,21 @@ class TestPersonGroup(unittest.TestCase):
 
         self.assertNotEqual(result['status'], 'running')
         self.client.face.personGroup.delete(personGroupId)
+
+    def test_person_group_create_or_update(self):
+        personGroupId = str(uuid.uuid4())
+        self.client.face.personGroup.createOrUpdate(personGroupId, 'name1')
+        result = self.client.face.personGroup.createOrUpdate(personGroupId, 'name2', 'user-data')
+        result = self.client.face.personGroup.get(personGroupId)
+
+        self.assertEqual(result['name'], 'name2')
+        self.assertEqual(result['userData'], 'user-data')
+
+        self.client.face.personGroup.delete(personGroupId)
+
+    def test_person_group_train_and_poll(self):
+        personGroupId = str(uuid.uuid4())
+        self.client.face.personGroup.create(personGroupId, 'python-test-group', 'test-data')
+        result = self.client.face.personGroup.trainAndPollForCompletion(personGroupId)
+        self.assertNotEqual(result['status'], 'running')
+        self.client.face.personGroup.delete(personGroupId)

@@ -1,7 +1,7 @@
 import time
 import requests
 
-retryCount = 3
+retryCount = 5
 
 class Base(object):
     """The base class for oxford API clients"""
@@ -64,6 +64,7 @@ class Base(object):
         headers = { 'Ocp-Apim-Subscription-Key': self.key }
 
         # detect faces in a URL
+        call = None
         if 'url' in options and options['url'] != '':
             headers['Content-Type'] = 'application/json'
             call = lambda: requests.post(url, json={'url': options['url']}, headers=headers, params=params)

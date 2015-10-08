@@ -1,4 +1,3 @@
-import json
 import requests
 
 _detectUrl = 'https://api.projectoxford.ai/face/v0/detections'
