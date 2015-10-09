@@ -86,19 +86,18 @@ class TestFace(unittest.TestCase):
         result = self.client.vision.thumbnail(options)
         self._verify_thumbnail_result(result, 'thumbnail_from_file.jpg')
 
-    def test_vision_thumbnail_url(self):
-        options = copy.copy(self.thumbnailOptions)
-        options['url'] = 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'
-        result = self.client.vision.thumbnail(options)
-        self._verify_thumbnail_result(result, 'thumbnail_from_url.jpg')
+    #def test_vision_thumbnail_url(self):
+    #    options = copy.copy(self.thumbnailOptions)
+    #    options['url'] = 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'
+    #    result = self.client.vision.thumbnail(options)
+    #    self._verify_thumbnail_result(result, 'thumbnail_from_url.jpg')
 
-    def test_vision_thumbnail_stream(self):
-        options = copy.copy(self.thumbnailOptions)
-        with open(os.path.join(self.localFilePrefix, 'face1.jpg'), 'rb') as file:
-            options['stream'] = file.read()
-            result = self.client.vision.thumbnail(options)
-
-        self._verify_thumbnail_result(result, 'thumbnail_from_stream.jpg')
+    #def test_vision_thumbnail_stream(self):
+    #    options = copy.copy(self.thumbnailOptions)
+    #    with open(os.path.join(self.localFilePrefix, 'face1.jpg'), 'rb') as file:
+    #        options['stream'] = file.read()
+    #        result = self.client.vision.thumbnail(options)
+    #    self._verify_thumbnail_result(result, 'thumbnail_from_stream.jpg')
 
     #
     # test the OCR API
