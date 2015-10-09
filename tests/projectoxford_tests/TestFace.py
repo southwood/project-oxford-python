@@ -108,3 +108,18 @@ class TestFace(unittest.TestCase):
         self.assertIsInstance(verifyResult, object, 'grouping result is returned')
         self.assertEqual(verifyResult['isIdentical'], True, 'verify succeeded')
         self.assertGreaterEqual(verifyResult['confidence'], 0.5, 'confidence is returned')
+
+    #
+    # test the identify API
+    #
+    def test_face_identify(self):
+        self.client.face.personGroup.createOrUpdate('testgroup', 'name')
+        faceId = self.client.face.detect({'path': os.path.join(self.localFilePrefix, 'face1.jpg')})[0]['faceId']
+        personId = self.client.face.person.createOrUpdate('testgroup', [faceId], 'billG')['personId']
+        self.client.face.personGroup.trainAndPollForCompletion('testgroup')
+        faceId2 = self.client.face.detect({'path': os.path.join(self.localFilePrefix, 'face2.jpg')})[0]['faceId']
+        identifyResult = self.client.face.identify('testgroup', [faceId2])
+
+        self.assertIsInstance(identifyResult, object, 'identify result is returned')
+        self.assertEqual(identifyResult[0]['candidates'][0]['personId'], personId)
+        self.client.face.personGroup.delete('testgroup')

@@ -96,7 +96,7 @@ class Face(Base):
         call = lambda: requests.post(_groupingUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
 
-    def identify(self, faces, options):
+    def identify(self, personGroupId, faces, maxNumOfCandidatesReturned=1):
         """Identifies persons from a person group by one or more input faces.
         To recognize which person a face belongs to, Face Identification needs a person group
         that contains number of persons. Each person contains one or more faces. After a person
@@ -106,23 +106,18 @@ class Face(Base):
 
         Args:
             faces (str[]). Array of faceIds to use
-            options (object). The Options object
-            options.personGroupId (str). The person group ID to use
-            options.maxNumOfCandidatesReturned (str). Maximum number of candidates to return
+            personGroupId (str). The person group ID to use
+            maxNumOfCandidatesReturned (str). Optional maximum number of candidates to return
 
         Returns:
             object. The resulting JSON
         """
 
         body = {
-            'faceIds': faces
+            'faceIds': faces,
+            'personGroupId': personGroupId,
+            'maxNumOfCandidatesReturned': maxNumOfCandidatesReturned
         }
-
-        if options is not None:
-            if options.personGroupId is not None:
-                body['personGroupId'] = options.personGroupId
-            if options.maxNumOfCandidatesReturned is not None:
-                body['maxNumOfCandidatesReturned'] = options.maxNumOfCandidatesReturned
 
         call = lambda: requests.post(_identifyUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
