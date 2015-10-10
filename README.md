@@ -29,8 +29,39 @@ client = Client('<api_key>')
 **Face detection**
 ```python
 result = client.face.detect({'url': 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'})
-print result['faceId']
-print result['attributes']['age']
+print(result['faceId'])
+print(result['attributes']['age'])
+```
+
+**Face identification**
+```python
+personGroup = 'example-person-group'
+bill = 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'
+billAndMelinda = 'https://upload.wikimedia.org/wikipedia/commons/2/28/Bill_og_Melinda_Gates_2009-06-03_%28bilde_01%29.JPG'
+
+# get a face ID and create and train a person group with a person
+faceId = client.face.detect({'url': bill})[0]['faceId']
+client.face.personGroup.createOrUpdate(personGroup, 'my person group')
+client.face.person.createOrUpdate(personGroup, [faceId], 'bill gates')
+client.face.personGroup.trainAndPollForCompletion(personGroup)
+
+# detect faces in a second photo
+detectResults = client.face.detect({'url': billAndMelinda})
+faceIds = []
+for result in detectResults:
+    faceIds.append(result['faceId'])
+
+# identify any known faces from the second photo
+identifyResults = client.face.identify(personGroup, faceIds)
+for result in identifyResults:
+    for candidate in result['candidates']:
+        confidence = candidate['confidence']
+        personData = client.face.person.get(personGroup, candidate['personId'])
+        name = personData['name']
+        print('identified {0} with {1}% confidence'.format(name, str(float(confidence) * 100)))
+
+# remove the example person group from your subscription
+client.face.personGroup.delete(personGroup)
 ```
 
 ## Contributing
