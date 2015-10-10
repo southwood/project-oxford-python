@@ -3,6 +3,7 @@ import requests
 
 retryCount = 5
 
+
 class Base(object):
     """The base class for oxford API clients"""
 
@@ -23,7 +24,7 @@ class Base(object):
             retries (int). The number of times this call has been retried.
         """
         response = invocation()
-        if response.status_code == 429: # throttling response code
+        if response.status_code == 429:  # throttling response code
             if retries <= retryCount:
                 delay = int(response.headers['retry-after'])
                 print('The projectoxford API was throttled. Retrying after {0} seconds'.format(str(delay)))
@@ -32,7 +33,7 @@ class Base(object):
             else:
                 raise Exception('retry count ({0}) exceeded: {1}'.format(str(retryCount), response.text))
         elif response.status_code == 200 or response.status_code == 201:
-            result = response # return the raw response if an unexpected content type is returned
+            result = response  # return the raw response if an unexpected content type is returned
             if 'content-length' in response.headers and int(response.headers['content-length']) == 0:
                 result = None
             elif 'content-type' in response.headers and isinstance(response.headers['content-type'], str):
@@ -40,7 +41,7 @@ class Base(object):
                     result = response.json() if response.content else None
                 elif 'image' in response.headers['content-type'].lower():
                     result = response.content
-            
+
             return result
         elif response.status_code == 404:
             return None
@@ -62,14 +63,14 @@ class Base(object):
         """
 
         # common header
-        headers = { 'Ocp-Apim-Subscription-Key': self.key }
+        headers = {'Ocp-Apim-Subscription-Key': self.key}
 
         # detect faces in a URL
         call = None
         if 'url' in options and options['url'] != '':
             headers['Content-Type'] = 'application/json'
             call = lambda: requests.post(url, json={'url': options['url']}, headers=headers, params=params)
-        
+
         # detect faces from a local file
         elif 'path' in options and options['path'] != '':
             headers['Content-Type'] = 'application/octet-stream'

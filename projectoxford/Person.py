@@ -1,12 +1,13 @@
 import requests
 
+from .Base import Base
+
 _personUrl = 'https://api.projectoxford.ai/face/v0/persongroups'
 
-from .Base import Base
 
 class Person(Base):
     """Client for using the Project Oxford person APIs"""
-    
+
     def __init__(self, key):
         """Initializes a new instance of the class.
         Args:
@@ -29,7 +30,7 @@ class Person(Base):
             object. The resulting JSON
         """
 
-        body = {} if userData is None else { 'userData': userData }
+        body = {} if userData is None else {'userData': userData}
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId + '/faces/' + faceId
         call = lambda: requests.put(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
@@ -63,7 +64,7 @@ class Person(Base):
             object. The resulting JSON
         """
 
-        body = {} if userData is None else { 'userData': userData }
+        body = {} if userData is None else {'userData': userData}
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId + '/faces/' + faceId
         call = lambda: requests.patch(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
@@ -182,7 +183,7 @@ class Person(Base):
             if person['name'] == name:
                 self.update(personGroupId, person['personId'], faceIds, name, userData)
                 return person
-                
+
         return self.create(personGroupId, faceIds, name, userData)
 
     def list(self, personGroupId):

@@ -7,8 +7,8 @@ install:
   - pip install pep8 --use-mirrors
   - pip install https://github.com/dcramer/pyflakes/tarball/master
 before_script:
-  - "pep8 --exclude=migrations --ignore=E501,E225 src"
-  - pyflakes -x W src
+  - "pep8 --ignore=E501,E225 projectoxford"
+  - pyflakes -x W projectoxford
 script:
   - python setup.py sdist
   - python setup.py test

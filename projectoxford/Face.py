@@ -1,18 +1,19 @@
 import requests
 
+from .Base import Base
+from .Person import Person
+from .PersonGroup import PersonGroup
+
 _detectUrl = 'https://api.projectoxford.ai/face/v0/detections'
 _similarUrl = 'https://api.projectoxford.ai/face/v0/findsimilars'
 _groupingUrl = 'https://api.projectoxford.ai/face/v0/groupings'
 _identifyUrl = 'https://api.projectoxford.ai/face/v0/identifications'
 _verifyUrl = 'https://api.projectoxford.ai/face/v0/verifications'
 
-from .Base import Base
-from .Person import Person
-from .PersonGroup import PersonGroup
 
 class Face(Base):
     """Client for using the Project Oxford face APIs"""
-    
+
     def __init__(self, key):
         """Initializes a new instance of the class.
         Args:
@@ -43,7 +44,7 @@ class Face(Base):
         Returns:
             object. The resulting JSON
         """
-    
+
         # build params query string
         params = {
             'analyzesFaceLandmarks': 'true' if 'analyzesFaceLandmarks' in options else 'false',
@@ -69,7 +70,7 @@ class Face(Base):
             'faceId': sourceFace,
             'faceIds': candidateFaces
         }
-    
+
         call = lambda: requests.post(_similarUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
 
@@ -91,8 +92,8 @@ class Face(Base):
             object. The resulting JSON
         """
 
-        body = { 'faceIds': faceIds }
-    
+        body = {'faceIds': faceIds}
+
         call = lambda: requests.post(_groupingUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
         return Base._invoke(self, call)
 
@@ -130,7 +131,7 @@ class Face(Base):
         Args:
             faceId1 (str). The first face to compare
             faceId2 (str). The second face to compare
-        
+
         Returns:
             object. The resulting JSON
         """

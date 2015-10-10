@@ -1,6 +1,7 @@
 from .Face import Face
 from .Vision import Vision
 
+
 class Client(object):
     """Client for using project oxford APIs"""
 
