@@ -34,9 +34,9 @@ class PersonGroup(Base):
             'userData': userData
         }
 
-        return self._invoke('put', 
-                            _personGroupUrl + '/' + personGroupId, 
-                            json=body, 
+        return self._invoke('put',
+                            _personGroupUrl + '/' + personGroupId,
+                            json=body,
                             headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def delete(self, personGroupId):
@@ -48,9 +48,9 @@ class PersonGroup(Base):
         Returns:
             object. The resulting JSON
         """
-        
+
         return self._invoke('delete',
-                            _personGroupUrl + '/' + personGroupId, 
+                            _personGroupUrl + '/' + personGroupId,
                             headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def get(self, personGroupId):
@@ -63,8 +63,8 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        return self._invoke('get', 
-                            _personGroupUrl + '/' + personGroupId, 
+        return self._invoke('get',
+                            _personGroupUrl + '/' + personGroupId,
                             headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def trainingStatus(self, personGroupId):
@@ -79,8 +79,8 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        return self._invoke('get', 
-                            _personGroupUrl + '/' + personGroupId + '/training', 
+        return self._invoke('get',
+                            _personGroupUrl + '/' + personGroupId + '/training',
                             headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def trainingStart(self, personGroupId):
@@ -96,8 +96,8 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        return self._invoke('post', 
-                            _personGroupUrl + '/' + personGroupId + '/training', 
+        return self._invoke('post',
+                            _personGroupUrl + '/' + personGroupId + '/training',
                             headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def update(self, personGroupId, name, userData=None):
@@ -119,9 +119,9 @@ class PersonGroup(Base):
             'userData': userData
         }
 
-        return self._invoke('patch', 
-                            _personGroupUrl + '/' + personGroupId, 
-                            json=body, 
+        return self._invoke('patch',
+                            _personGroupUrl + '/' + personGroupId,
+                            json=body,
                             headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def createOrUpdate(self, personGroupId, name, userData=None):

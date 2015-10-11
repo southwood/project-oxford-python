@@ -28,12 +28,12 @@ class Base(object):
             :param params: (optional) Dictionary or bytes to be sent in the query string for the :class:`Request`.
             :param retries: The number of times this call has been retried.
         """
-            
+
         try:
             response = requests.request(method, url, json=json, data=data, headers=headers, params=params)
         except Exception, e:
             raise e
-               
+
         if response.status_code == 429:  # throttling response code
             if retries <= retryCount:
                 delay = int(response.headers['retry-after'])
