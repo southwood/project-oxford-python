@@ -85,7 +85,9 @@ class Base(object):
         # detect faces from a local file
         elif 'path' in options and options['path'] != '':
             headers['Content-Type'] = 'application/octet-stream'
-            data = open(options['path'], 'rb').read()
+            data_file = open(options['path'], 'rb')
+            data = data_file.read()
+            data_file.close()
 
         # detect faces in an octect stream
         elif 'stream' in options:
