@@ -1,5 +1,3 @@
-import requests
-
 from .Base import Base
 
 _personUrl = 'https://api.projectoxford.ai/face/v0/persongroups'
@@ -32,8 +30,7 @@ class Person(Base):
 
         body = {} if userData is None else {'userData': userData}
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId + '/faces/' + faceId
-        call = lambda: requests.put(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('put', uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def deleteFace(self, personGroupId, personId, faceId):
         """Deletes a face from a person.
@@ -48,8 +45,7 @@ class Person(Base):
         """
 
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId + '/faces/' + faceId
-        call = lambda: requests.delete(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('delete', uri, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def updateFace(self, personGroupId, personId, faceId, userData=None):
         """Updates a face for a person.
@@ -66,8 +62,7 @@ class Person(Base):
 
         body = {} if userData is None else {'userData': userData}
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId + '/faces/' + faceId
-        call = lambda: requests.patch(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('patch', uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def getFace(self, personGroupId, personId, faceId):
         """Get a face for a person.
@@ -82,8 +77,7 @@ class Person(Base):
         """
 
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId + '/faces/' + faceId
-        call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('get', uri, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def create(self, personGroupId, faceIds, name, userData=None):
         """Creates a new person in a specified person group for identification.
@@ -109,8 +103,7 @@ class Person(Base):
             body['userData'] = userData
 
         uri = _personUrl + '/' + personGroupId + '/persons'
-        call = lambda: requests.post(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('post', uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def delete(self, personGroupId, personId):
         """Deletes an existing person from a person group.
@@ -124,8 +117,7 @@ class Person(Base):
         """
 
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId
-        call = lambda: requests.delete(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('delete', uri, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def get(self, personGroupId, personId):
         """Gets an existing person from a person group.
@@ -139,8 +131,7 @@ class Person(Base):
         """
 
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId
-        call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('get', uri, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def update(self, personGroupId, personId, faceIds, name, userData=None):
         """Updates a person's information.
@@ -163,8 +154,7 @@ class Person(Base):
         }
 
         uri = _personUrl + '/' + personGroupId + '/persons/' + personId
-        call = lambda: requests.patch(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('patch', uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def createOrUpdate(self, personGroupId, faceIds, name, userData=None):
         """Creates or updates a person's information.
@@ -197,5 +187,4 @@ class Person(Base):
         """
 
         uri = _personUrl + '/' + personGroupId + '/persons'
-        call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('get', uri, headers={'Ocp-Apim-Subscription-Key': self.key})

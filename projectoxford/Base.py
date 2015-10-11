@@ -17,19 +17,29 @@ class Base(object):
         else:
             raise Exception('Key is required but a string was not provided')
 
-    def _invoke(self, invocation, retries=0):
+    def _invoke(self, method, url, json=None, data=None, headers={}, params={}, retries=0):
         """Attempt to invoke the a call to oxford. If the call is trottled, retry.
         Args:
-            invocation (lambda). The oxford call to issue, should return an http response
-            retries (int). The number of times this call has been retried.
+            :param method: method for the new :class:`Request` object.
+            :param url: URL for the new :class:`Request` object.
+            :param data: (optional) Dictionary, bytes, or file-like object to send in the body of the :class:`Request`.
+            :param json: (optional) json data to send in the body of the :class:`Request`.
+            :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
+            :param params: (optional) Dictionary or bytes to be sent in the query string for the :class:`Request`.
+            :param retries: The number of times this call has been retried.
         """
-        response = invocation()
+            
+        try:
+            response = requests.request(method, url, json=json, data=data, headers=headers, params=params)
+        except Exception, e:
+            raise e
+               
         if response.status_code == 429:  # throttling response code
             if retries <= retryCount:
                 delay = int(response.headers['retry-after'])
                 print('The projectoxford API was throttled. Retrying after {0} seconds'.format(str(delay)))
                 time.sleep(delay)
-                return Base._invoke(self, invocation, retries + 1)
+                return self._invoke(method, url, json=json, data=data, headers=headers, params=params, retries=retries + 1)
             else:
                 raise Exception('retry count ({0}) exceeded: {1}'.format(str(retryCount), response.text))
         elif response.status_code == 200 or response.status_code == 201:
@@ -52,39 +62,41 @@ class Base(object):
         """Common options handler for vision / face detection
 
         Args:
-            options (Object). The Options object describing features to extract
+            url (string). The url to invoke in the Oxford API
+            options (Object). The Options dictionary describing features to extract
             options.url (string). The Url to image to be analyzed
             options.path (string). The Path to image to be analyzed
             options.stream (string). The image stream to be analyzed
-            params (Object). The url parameters object
+            params (Object). The url parameters dictionary
 
         Returns:
             object. The resulting JSON
         """
 
+        # The types of data that can be passed to the API
+        json = None
+        data = None
+
         # common header
         headers = {'Ocp-Apim-Subscription-Key': self.key}
 
         # detect faces in a URL
-        call = None
         if 'url' in options and options['url'] != '':
             headers['Content-Type'] = 'application/json'
-            call = lambda: requests.post(url, json={'url': options['url']}, headers=headers, params=params)
+            json={'url': options['url']}
 
         # detect faces from a local file
         elif 'path' in options and options['path'] != '':
             headers['Content-Type'] = 'application/octet-stream'
-            with open(options['path'], 'rb') as file:
-                data = file.read()
-                call = lambda: requests.post(url, data=data, headers=headers, params=params)
+            data = open(options['path'], 'rb').read()
 
         # detect faces in an octect stream
         elif 'stream' in options:
             headers['Content-Type'] = 'application/octet-stream'
-            call = lambda: requests.post(url, data=options['stream'], headers=headers, params=params)
+            data = options['stream']
 
         # fail if the options didn't specify an image source
-        if call is None:
-            raise Exception('either url, path, or stream must be specified')
+        if not json and not data:
+            raise Exception('Data must be supplied as either JSON or a Binary image data.')
 
-        return Base._invoke(self, call)
+        return self._invoke('post', url, json=json, data=data, headers=headers, params=params)

@@ -1,4 +1,3 @@
-import requests
 import time
 
 from .Base import Base
@@ -35,9 +34,10 @@ class PersonGroup(Base):
             'userData': userData
         }
 
-        uri = _personGroupUrl + '/' + personGroupId
-        call = lambda: requests.put(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('put', 
+                            _personGroupUrl + '/' + personGroupId, 
+                            json=body, 
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def delete(self, personGroupId):
         """Deletes an existing person group.
@@ -48,10 +48,10 @@ class PersonGroup(Base):
         Returns:
             object. The resulting JSON
         """
-
-        uri = _personGroupUrl + '/' + personGroupId
-        call = lambda: requests.delete(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        
+        return self._invoke('delete',
+                            _personGroupUrl + '/' + personGroupId, 
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def get(self, personGroupId):
         """Gets an existing person group.
@@ -63,9 +63,9 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        uri = _personGroupUrl + '/' + personGroupId
-        call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('get', 
+                            _personGroupUrl + '/' + personGroupId, 
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def trainingStatus(self, personGroupId):
         """Retrieves the training status of a person group. Training is triggered by the Train PersonGroup API.
@@ -79,9 +79,9 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        uri = _personGroupUrl + '/' + personGroupId + '/training'
-        call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('get', 
+                            _personGroupUrl + '/' + personGroupId + '/training', 
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def trainingStart(self, personGroupId):
         """Starts a person group training.
@@ -96,9 +96,9 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        uri = _personGroupUrl + '/' + personGroupId + '/training'
-        call = lambda: requests.post(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('post', 
+                            _personGroupUrl + '/' + personGroupId + '/training', 
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def update(self, personGroupId, name, userData=None):
         """Updates a person group with a user-specified ID.
@@ -119,9 +119,10 @@ class PersonGroup(Base):
             'userData': userData
         }
 
-        uri = _personGroupUrl + '/' + personGroupId
-        call = lambda: requests.patch(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('patch', 
+                            _personGroupUrl + '/' + personGroupId, 
+                            json=body, 
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def createOrUpdate(self, personGroupId, name, userData=None):
         """Creates or updates a person group with a user-specified ID.
@@ -168,6 +169,4 @@ class PersonGroup(Base):
         Returns:
             object. The resulting JSON
         """
-
-        call = lambda: requests.get(_personGroupUrl, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('get', _personGroupUrl, headers={'Ocp-Apim-Subscription-Key': self.key})
