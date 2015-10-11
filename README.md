@@ -80,7 +80,8 @@ client.face.personGroup.delete(personGroup)
 * Set environment variable API key
     
     ```
-    set OXFORD_API_KEY=<insert_your_key_here>
+    set OXFORD_FACE_API_KEY=<insert_your_key_here>
+    set OXFORD_VISION_API_KEY=<insert_your_key_here>
     ```
 * Run tests
     
