@@ -29,10 +29,7 @@ class Base(object):
             :param retries: The number of times this call has been retried.
         """
 
-        try:
-            response = requests.request(method, url, json=json, data=data, headers=headers, params=params)
-        except Exception, e:
-            raise e
+        response = requests.request(method, url, json=json, data=data, headers=headers, params=params)
 
         if response.status_code == 429:  # throttling response code
             if retries <= retryCount:
