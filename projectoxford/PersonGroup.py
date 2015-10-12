@@ -1,20 +1,20 @@
-import requests
 import time
-
-_personGroupUrl = 'https://api.projectoxford.ai/face/v0/persongroups'
 
 from .Base import Base
 
+_personGroupUrl = 'https://api.projectoxford.ai/face/v0/persongroups'
+
+
 class PersonGroup(Base):
     """Client for using the Project Oxford person group APIs"""
-    
+
     def __init__(self, key):
         """Initializes a new instance of the class.
         Args:
             key (str). the API key to use for this client.
         """
         Base.__init__(self, key)
-        
+
     def create(self, personGroupId, name, userData=None):
         """Creates a new person group with a user-specified ID.
         A person group is one of the most important parameters for the Identification API.
@@ -33,11 +33,12 @@ class PersonGroup(Base):
             'name': name,
             'userData': userData
         }
-    
-        uri = _personGroupUrl + '/' + personGroupId
-        call = lambda: requests.put(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
-    
+
+        return self._invoke('put',
+                            _personGroupUrl + '/' + personGroupId,
+                            json=body,
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
+
     def delete(self, personGroupId):
         """Deletes an existing person group.
 
@@ -48,10 +49,10 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        uri = _personGroupUrl + '/' + personGroupId
-        call = lambda: requests.delete(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
-    
+        return self._invoke('delete',
+                            _personGroupUrl + '/' + personGroupId,
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
+
     def get(self, personGroupId):
         """Gets an existing person group.
 
@@ -62,9 +63,9 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        uri = _personGroupUrl + '/' + personGroupId
-        call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('get',
+                            _personGroupUrl + '/' + personGroupId,
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def trainingStatus(self, personGroupId):
         """Retrieves the training status of a person group. Training is triggered by the Train PersonGroup API.
@@ -78,9 +79,9 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        uri = _personGroupUrl + '/' + personGroupId + '/training'
-        call = lambda: requests.get(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('get',
+                            _personGroupUrl + '/' + personGroupId + '/training',
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def trainingStart(self, personGroupId):
         """Starts a person group training.
@@ -95,10 +96,10 @@ class PersonGroup(Base):
             object. The resulting JSON
         """
 
-        uri = _personGroupUrl + '/' + personGroupId + '/training'
-        call = lambda: requests.post(uri, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
-    
+        return self._invoke('post',
+                            _personGroupUrl + '/' + personGroupId + '/training',
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
+
     def update(self, personGroupId, name, userData=None):
         """Updates a person group with a user-specified ID.
         A person group is one of the most important parameters for the Identification API.
@@ -117,10 +118,11 @@ class PersonGroup(Base):
             'name': name,
             'userData': userData
         }
-    
-        uri = _personGroupUrl + '/' + personGroupId
-        call = lambda: requests.patch(uri, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+
+        return self._invoke('patch',
+                            _personGroupUrl + '/' + personGroupId,
+                            json=body,
+                            headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def createOrUpdate(self, personGroupId, name, userData=None):
         """Creates or updates a person group with a user-specified ID.
@@ -148,7 +150,7 @@ class PersonGroup(Base):
 
         Returns:
             object. The resulting JSON
-        """        
+        """
         timeout = 0
         status = self.trainingStart(personGroupId)
         while status['status'] == 'running':
@@ -163,10 +165,8 @@ class PersonGroup(Base):
 
     def list(self):
         """Lists all person groups in the current subscription.
-           
+
         Returns:
             object. The resulting JSON
         """
-
-        call = lambda: requests.get(_personGroupUrl, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('get', _personGroupUrl, headers={'Ocp-Apim-Subscription-Key': self.key})

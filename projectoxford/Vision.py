@@ -1,15 +1,15 @@
 import re
-import requests
+
+from .Base import Base
 
 _analyzeUrl = 'https://api.projectoxford.ai/vision/v1/analyses'
 _thumbnailUrl = 'https://api.projectoxford.ai/vision/v1/thumbnails'
 _ocrUrl = 'https://api.projectoxford.ai/vision/v1/ocr'
 
-from .Base import Base
 
 class Vision(Base):
     """Client for using the Project Oxford face APIs"""
-    
+
     def __init__(self, key):
         """Initializes a new instance of the class.
         Args:
@@ -37,13 +37,13 @@ class Vision(Base):
         Returns:
             object. The resulting JSON
         """
-        flags = [];
+        flags = []
         for option in options:
             match = re.match(r'(ImageType)|(Color)|(Faces)|(Adult)|(Categories)', option)
             if match and options[option]:
                 flags.append(option)
 
-        params = { 'visualFeatures': ','.join(flags) } if flags else {}
+        params = {'visualFeatures': ','.join(flags)} if flags else {}
         return Base._postWithOptions(self, _analyzeUrl, options, params)
 
     def thumbnail(self, options):

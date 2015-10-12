@@ -1,4 +1,6 @@
-import requests
+from .Base import Base
+from .Person import Person
+from .PersonGroup import PersonGroup
 
 _detectUrl = 'https://api.projectoxford.ai/face/v0/detections'
 _similarUrl = 'https://api.projectoxford.ai/face/v0/findsimilars'
@@ -6,13 +8,10 @@ _groupingUrl = 'https://api.projectoxford.ai/face/v0/groupings'
 _identifyUrl = 'https://api.projectoxford.ai/face/v0/identifications'
 _verifyUrl = 'https://api.projectoxford.ai/face/v0/verifications'
 
-from .Base import Base
-from .Person import Person
-from .PersonGroup import PersonGroup
 
 class Face(Base):
     """Client for using the Project Oxford face APIs"""
-    
+
     def __init__(self, key):
         """Initializes a new instance of the class.
         Args:
@@ -43,7 +42,7 @@ class Face(Base):
         Returns:
             object. The resulting JSON
         """
-    
+
         # build params query string
         params = {
             'analyzesFaceLandmarks': 'true' if 'analyzesFaceLandmarks' in options else 'false',
@@ -69,9 +68,8 @@ class Face(Base):
             'faceId': sourceFace,
             'faceIds': candidateFaces
         }
-    
-        call = lambda: requests.post(_similarUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+
+        return self._invoke('post', _similarUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def grouping(self, faceIds):
         """Divides candidate faces into groups based on face similarity using faceIds.
@@ -91,10 +89,9 @@ class Face(Base):
             object. The resulting JSON
         """
 
-        body = { 'faceIds': faceIds }
-    
-        call = lambda: requests.post(_groupingUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        body = {'faceIds': faceIds}
+
+        return self._invoke('post', _groupingUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def identify(self, personGroupId, faces, maxNumOfCandidatesReturned=1):
         """Identifies persons from a person group by one or more input faces.
@@ -119,8 +116,7 @@ class Face(Base):
             'maxNumOfCandidatesReturned': maxNumOfCandidatesReturned
         }
 
-        call = lambda: requests.post(_identifyUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('post', _identifyUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
 
     def verify(self, faceId1, faceId2):
         """Analyzes two faces and determine whether they are from the same person.
@@ -130,7 +126,7 @@ class Face(Base):
         Args:
             faceId1 (str). The first face to compare
             faceId2 (str). The second face to compare
-        
+
         Returns:
             object. The resulting JSON
         """
@@ -140,5 +136,4 @@ class Face(Base):
             'faceId2': faceId2
         }
 
-        call = lambda: requests.post(_verifyUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})
-        return Base._invoke(self, call)
+        return self._invoke('post', _verifyUrl, json=body, headers={'Ocp-Apim-Subscription-Key': self.key})

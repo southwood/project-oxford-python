@@ -3,7 +3,10 @@ python:
   - "2.7"
   - "3.4"
 install:
-  - pip install requests
+  - pip install -r requirements.txt
+  - pip install flake8
+before_script:
+  - flake8 --ignore="E501,E225" projectoxford
 script:
   - python setup.py sdist
   - python setup.py test
