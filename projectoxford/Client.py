@@ -1,5 +1,6 @@
 from .Face import Face
 from .Vision import Vision
+from .Emotion import Emotion
 
 
 class Client(object):
@@ -18,6 +19,7 @@ class Client(object):
 
         self._face = Face(key)
         self._vision = Vision(key)
+        self._emotion = Emotion(key)
 
     @property
     def face(self):
@@ -34,3 +36,11 @@ class Client(object):
             :class:`vision`. the vision API instance.
         """
         return self._vision
+
+    @property
+    def emotion(self):
+        """The emotion API interface.
+        Returns:
+            :class:`emotion`. the emotion API instance.
+        """
+        return self._emotion
