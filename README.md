@@ -93,7 +93,7 @@ client.face.personGroup.delete(personGroup)
 	```
 	git tag <version number> -m "update tag version"
 	git push --tags origin master
-	python setup.py register -r pypi
+	python setup.py register -r pypi # first time only
 	python setup.py sdist upload
 	```
 
