@@ -57,6 +57,7 @@
     <Content Include="LICENSE" />
     <Content Include="MANIFEST.in" />
     <Content Include="README.md" />
+    <Content Include="requirements.txt" />
     <Content Include="setup.cfg" />
     <Content Include="tests\images\face-group.jpg" />
     <Content Include="tests\images\face1.jpg" />
