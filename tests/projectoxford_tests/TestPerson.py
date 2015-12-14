@@ -1,4 +1,3 @@
-import inspect
 import os
 import sys
 import unittest
@@ -8,9 +7,7 @@ rootDirectory = os.path.dirname(os.path.realpath('__file__'))
 if rootDirectory not in sys.path:
     sys.path.append(os.path.join(rootDirectory, '..'))
 
-from test import test_support
 from projectoxford.Client import Client
-from projectoxford.Person import Person
 
 class TestPerson(unittest.TestCase):
     '''Tests the project oxford API client'''

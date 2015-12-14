@@ -1,8 +1,4 @@
 import unittest
-import inspect
-import json
-
-from test import test_support
 
 import sys, os, os.path
 

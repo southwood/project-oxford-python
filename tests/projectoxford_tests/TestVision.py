@@ -1,19 +1,13 @@
 import copy
-import inspect
 import os
 import sys
 import unittest
-import uuid
 
 rootDirectory = os.path.dirname(os.path.realpath('__file__'))
 if rootDirectory not in sys.path:
     sys.path.append(os.path.join(rootDirectory, '..'))
 
-from test import test_support
 from projectoxford.Client import Client
-from projectoxford.Face import Face
-from projectoxford.Person import Person
-from projectoxford.PersonGroup import PersonGroup
 
 class TestFace(unittest.TestCase):
     '''Tests the project oxford face API self.client'''
