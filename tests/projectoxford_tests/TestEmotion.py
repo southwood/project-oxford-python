@@ -20,7 +20,7 @@ class TestEmotion(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # set up self.client for tests
-        cls.client = Client(os.environ['OXFORD_EMOTION_API_KEY'])
+        cls.client = Client.emotion(os.environ['OXFORD_EMOTION_API_KEY'])
 
         cls.localFilePrefix = os.path.join(rootDirectory, 'tests', 'images')
 
@@ -41,21 +41,21 @@ class TestEmotion(unittest.TestCase):
     def test_emotion_recognize_url(self):
         options = copy.copy(self.recognizeOptions)
         options['url'] = 'https://upload.wikimedia.org/wikipedia/commons/1/19/Bill_Gates_June_2015.jpg'
-        recognizeResult = self.client.emotion.recognize(options)
+        recognizeResult = self.client.recognize(options)
         self._verifyRecognize(recognizeResult)
 
     def test_emotion_recognize_file(self):
         options = copy.copy(self.recognizeOptions)
         options['path'] = os.path.join(self.localFilePrefix, 'face1.jpg')
-        recognizeResult = self.client.emotion.recognize(options)
+        recognizeResult = self.client.recognize(options)
         self._verifyRecognize(recognizeResult)
 
     def test_emotion_recognize_stream(self):
         options = copy.copy(self.recognizeOptions)
         with open(os.path.join(self.localFilePrefix, 'face1.jpg'), 'rb') as file:
             options['stream'] = file.read()
-            recognizeResult = self.client.emotion.recognize(options)
+            recognizeResult = self.client.recognize(options)
         self._verifyRecognize(recognizeResult)
 
     def test_emotion_recognize_throws_invalid_options(self):
-        self.assertRaises(Exception, self.client.emotion.recognize, {})
+        self.assertRaises(Exception, self.client.recognize, {})

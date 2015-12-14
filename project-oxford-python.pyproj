@@ -28,6 +28,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="projectoxford\Client.py" />
+    <Compile Include="projectoxford\Emotion.py" />
     <Compile Include="projectoxford\Face.py" />
     <Compile Include="projectoxford\Person.py" />
     <Compile Include="projectoxford\PersonGroup.py">
@@ -36,6 +37,7 @@
     <Compile Include="projectoxford\Vision.py" />
     <Compile Include="projectoxford\__init__.py" />
     <Compile Include="setup.py" />
+    <Compile Include="tests\projectoxford_tests\TestEmotion.py" />
     <Compile Include="tests\projectoxford_tests\TestVision.py" />
     <Compile Include="tests\projectoxford_tests\TestPerson.py" />
     <Compile Include="tests\projectoxford_tests\TestPersonGroup.py" />

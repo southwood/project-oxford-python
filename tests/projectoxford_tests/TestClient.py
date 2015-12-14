@@ -17,9 +17,13 @@ class TestClient(unittest.TestCase):
         self.assertRaises(Exception, Client, None)
 
     def test_constructor_sets_instrumentation_key(self):
-        oxford = Client('key')
-        self.assertEqual('key', oxford.key)
+        face = Client.face('key')
+        vision = Client.vision('key')
+        emotion = Client.emotion('key')
+        self.assertIsNotNone(face)
+        self.assertIsNotNone(vision)
+        self.assertIsNotNone(emotion)
 
     def test_face_return_throws_for_bad_request(self):
-        client = Client('key')
-        self.assertRaises(Exception, client.face.detect, {'url': 'http://bing.com'});
+        client = Client.face('key')
+        self.assertRaises(Exception, client.detect, {'url': 'http://bing.com'});
